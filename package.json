@@ -1,0 +1,62 @@
+{
+  "_from": "homebridge-http-webhooks@latest",
+  "_id": "homebridge-http-webhooks@0.0.58",
+  "_inBundle": false,
+  "_integrity": "sha512-dkkZwkIymGp8/UGU7W3JSXe1SmJKNtE9eep0N9UBbRqoC32+Vm3/3FUD9AMEOP9F0nrldjISeb7pglmvC9eiLA==",
+  "_location": "/homebridge-http-webhooks",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "homebridge-http-webhooks@latest",
+    "name": "homebridge-http-webhooks",
+    "escapedName": "homebridge-http-webhooks",
+    "rawSpec": "latest",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/homebridge-http-webhooks/-/homebridge-http-webhooks-0.0.58.tgz",
+  "_shasum": "2c239fe4ca438c51f0a01e04faa144cef1f78333",
+  "_spec": "homebridge-http-webhooks@latest",
+  "_where": "/usr/local/lib",
+  "author": {
+    "name": "benzman81"
+  },
+  "bugs": {
+    "url": "https://github.com/benzman81/homebridge-http-webhooks/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "http-auth": "^3.2.4",
+    "node-persist": "2.0.x",
+    "request": "2.87.x",
+    "selfsigned": "^1.10.7"
+  },
+  "deprecated": false,
+  "description": "A http plugin with support of webhooks for Homebridge: https://github.com/nfarina/homebridge",
+  "engines": {
+    "homebridge": ">=0.3.0",
+    "node": ">=9.11.2"
+  },
+  "homepage": "https://github.com/benzman81/homebridge-http-webhooks#readme",
+  "keywords": [
+    "homebridge-plugin",
+    "homebridge",
+    "plugin",
+    "http",
+    "webhook",
+    "smart",
+    "homekit",
+    "siri"
+  ],
+  "license": "GPL-3.0",
+  "name": "homebridge-http-webhooks",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/benzman81/homebridge-http-webhooks.git"
+  },
+  "version": "0.0.58"
+}
