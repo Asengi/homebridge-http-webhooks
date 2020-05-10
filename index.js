@@ -194,15 +194,19 @@ HttpWebHooksPlatform.prototype = {
                 if(accessory.id === accessoryId) {
                    var stateVal = theParams[accessoryId];
                    if (accessory.type == "security") {
-                      this.storage.setItemSync("http-webhook-current-security-state-" + accessoryId, stateVal);
-                      accessory.changeCurrentStateHandler(stateVal);
-                      this.storage.setItemSync("http-webhook-target-security-state-" + accessoryId, stateVal);
-                      accessory.changeTargetStateHandler(stateVal);
+                      //StateVal from Alarm:  0 = disarmed,                2 = Night arm, 3 = Away arm, 4 = Alarm 
+                      //State in HK:          3 = disarmed, 0 = Home arm,  2 = Night arm, 1 = Away arm, 4 = Alarm
+                      var stateValHK = (stateVal & 4) | (stateVal == 3) | (stateVal == 2)*2 | (stateVal == 0)*3;
+                      this.log("State change of '%s' to '%s' (got: '%s').",accessoryId,stateValHK,stateVal);
+                      this.storage.setItemSync("http-webhook-current-security-state-" + accessoryId, stateValHK);
+                      accessory.changeCurrentStateHandler(stateValHK);
+                      this.storage.setItemSync("http-webhook-target-security-state-" + accessoryId, stateValHK);
+                      accessory.changeTargetStateHandler(stateValHK);
                    }
                    else {
                       var stateBool = stateVal === "1";
-                      this.storage.setItemSync("http-webhook-" + accessory.Id, stateBool);
-                      this.log("[INFO Http WebHook Server] State change of '%s' to '%s'.",accessory.id,stateBool);
+                      this.storage.setItemSync("http-webhook-" + accessoryId, stateBool);
+                      this.log("State change of '%s' to '%s'.",accessoryId,stateBool);
                       accessory.changeHandler(stateBool);
                    }
                 }
@@ -1791,7 +1795,9 @@ HttpWebHookSecurityAccessory.prototype.setTargetSecurityState = function(newStat
   this.storage.setItemSync("http-webhook-target-security-state-" + this.id, newState);
   var urlToCall = this.setStateURL.replace("%d", newState);
   var urlMethod = this.setStateMethod;
-  var urlBody = this.setStateBody.replace("%d", parseInt((4-newState)%4+(4-newState)/4));
+  //State in HK:        0 = Home,      1 = Away arm,     2 = Night arm, 3 = disarmed
+  //StateVal to Alarm:  2 = Night arm, 3 = Away arm,     2 = Night arm, 0 = disarmed 
+  var urlBody = this.setStateBody.replace("%d", (4-newState)%4 + (newState==0)*2);
   var urlForm = this.setStateForm;
   var urlHeaders = this.setStateHeaders;
  
@@ -1814,7 +1820,7 @@ HttpWebHookSecurityAccessory.prototype.setTargetSecurityState = function(newStat
     }
     request(theRequest, (function(err, response, body) {
       var statusCode = response && response.statusCode ? response.statusCode : -1;
-      this.log("Request to '%s' finished with status code '%s' and body '%s'.", urlToCall, statusCode, body, err);
+      this.log("Request to '%s' finished with status code '%s'.", urlToCall, statusCode, err);
       if (!err && statusCode == 200) {
         this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState).updateValue(newState, undefined, null);
         callback(null);
